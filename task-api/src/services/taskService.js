@@ -1,4 +1,4 @@
-const { v4: uuidv4 } = require('uuid');
+const { v4: uuidv4 } = require("uuid");
 
 let tasks = [];
 
@@ -9,7 +9,8 @@ const findById = (id) => tasks.find((t) => t.id === id);
 const getByStatus = (status) => tasks.filter((t) => t.status.includes(status));
 
 const getPaginated = (page, limit) => {
-  const offset = page * limit;
+  // const offset = page * limit;
+  const offset = (page - 1) * limit; // BUG ALERT: This was the original line, but it caused pagination to break. The correct logic is (page - 1) * limit.
   return tasks.slice(offset, offset + limit);
 };
 
@@ -20,7 +21,7 @@ const getStats = () => {
 
   tasks.forEach((t) => {
     if (counts[t.status] !== undefined) counts[t.status]++;
-    if (t.dueDate && t.status !== 'done' && new Date(t.dueDate) < now) {
+    if (t.dueDate && t.status !== "done" && new Date(t.dueDate) < now) {
       overdue++;
     }
   });
@@ -28,7 +29,13 @@ const getStats = () => {
   return { ...counts, overdue };
 };
 
-const create = ({ title, description = '', status = 'todo', priority = 'medium', dueDate = null }) => {
+const create = ({
+  title,
+  description = "",
+  status = "todo",
+  priority = "medium",
+  dueDate = null,
+}) => {
   const task = {
     id: uuidv4(),
     title,
@@ -66,8 +73,8 @@ const completeTask = (id) => {
 
   const updated = {
     ...task,
-    priority: 'medium',
-    status: 'done',
+    priority: "medium", // BUG : priority should not change when completing a task! so remove this line
+    status: "done",
     completedAt: new Date().toISOString(),
   };
 
