@@ -143,3 +143,23 @@ describe("Advanced Route Tests", () => {
     expect(deleteRes.statusCode).toBe(204);
   });
 });
+
+describe("PATCH /tasks/:id/assign", () => {
+  it("should assign a user to an existing task", async () => {
+    const task = taskService.create({ title: "New Feature Task" });
+    const res = await request(app)
+      .patch(`/tasks/${task.id}/assign`)
+      .send({ assignee: "Prince" });
+
+    expect(res.statusCode).toBe(200);
+    expect(res.body.assignee).toBe("Prince");
+  });
+
+  it("should return 400 if assignee is an empty string", async () => {
+    const task = taskService.create({ title: "Validation Task" });
+    const res = await request(app)
+      .patch(`/tasks/${task.id}/assign`)
+      .send({ assignee: "" });
+    expect(res.statusCode).toBe(400);
+  });
+});
