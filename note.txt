@@ -1,0 +1,8 @@
+1. What I’d test next if I had more time
+I’d add tests for Rate Limiting and JWT Authentication to ensure only authorized users can create or delete tasks.
+
+2. Anything that surprised me in the codebase
+I was surprised to find a classic "off-by-one" error in the offset calculation. It’s a great example of how a simple line of code can skip an entire page of data for a user.
+
+3. Questions I'd ask before shipping to production
+Are there specific constraints for the assignee field? For example, should we validate against a list of existing users in a 'Users' database?
